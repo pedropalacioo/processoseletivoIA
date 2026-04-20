@@ -101,7 +101,7 @@ pip install -r requirements.txt
 
 
 
-#### Opção B – Dev Container 
+#### Opção B – Dev Container (OPÇÃO ESCOLHIDA)
 Este repositório inclui um **Dev Container** para facilitar a criação de um ambiente Python padronizado.
 
 **Requisitos**
@@ -133,6 +133,8 @@ Você também pode abrir o container via github codespace
 ---
 
 ## 💻 Passo 2: O Desafio Técnico
+
+---
 
 O desafio consiste em desenvolver um **modelo de Visão Computacional** capaz de **classificar dígitos manuscritos**, e posteriormente **otimizá-lo para execução em dispositivos Edge**, como sistemas embarcados e IoT.
 
@@ -361,3 +363,16 @@ Em caso de dúvidas:
 
 Boa sorte no processo seletivo.
 ****
+
+
+---
+## Resumo dos passos e decisões técnicas para abordados para facilitar estruturação do README ao final do projeto:
+
+### Primeira Implementação: `train_model.py`:
+
+Implementando o treinamento de uma CNN para classificação de dígitos MNIST. O processo inclui: carregamento e normalização dos dados (60.000 imagens de treinamento), construção de uma rede com 3 camadas convolucionais (32, 64 e 128 filtros) seguidas por camadas Dense (128 e 10 neurônios), treinamento em 5 épocas com otimizador Adam, e salvamento do modelo em formato Keras (model.h5). A acurácia esperada é de 95-99% no conjunto de teste.
+
+- Comando de execução: `python train_model.py`
+
+---
+
