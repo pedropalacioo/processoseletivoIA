@@ -308,9 +308,6 @@ Copie o link do seu repositório e envie conforme orientações do processo sele
 
 ### 1️⃣ Resumo da Arquitetura do Modelo
 
-Descreva, em palavras, a arquitetura da **CNN** implementada no arquivo
-`train_model.py`.
-
 ---
 
 Estrutura do modelo CNN implementado:
@@ -326,11 +323,6 @@ O modelo possui alta acurácia mantendo um tamanho compacto adequando para Edge 
 
 ### 2️⃣ Bibliotecas Utilizadas
 
-Liste as principais bibliotecas utilizadas no projeto, preferencialmente
-com suas versões.
-
----
-
 Principais Bibliotecas utilizadas: 
 - TensorFlow: Framework principal para a construção e otimização de modelos de deep learning
 - Keras(Integrada ao TensorFlow): API de alto nível para construção da arquitetura CNN
@@ -341,17 +333,10 @@ Principais Bibliotecas utilizadas:
 
 ### 3️⃣ Técnica de Otimização do Modelo
 
-Explique qual técnica foi utilizada para otimizar o modelo no arquivo
-`optimize_model.py`.
----
-
 A técnica de otimização utilizada foi a *Dynamic Range Quantization*, que reduz o tamanho e acelera a inferência ao converter os pesos de float32 para int8, sem precisar de um dataset durante a conversão. A técnica mantém a acurácia do modelo com redução de ~2-3% na acurácia, reduzindo seu tamanho em ~75-90%
 
 
 ### 4️⃣ Resultados Obtidos
-
-Informe o principal resultado obtido após o treinamento do modelo.
----
 
 Os resultados obtivos consistem em:
 - `model.h5`: modelo treinado com acurácia esperada de 95-99%
@@ -378,21 +363,3 @@ Em caso de dúvidas:
 
 Boa sorte no processo seletivo.
 ****
-
-
----
-## Resumo dos passos e decisões técnicas para abordados para facilitar estruturação do README ao final do projeto:
-
-### Implementação: `train_model.py`:
-
-Implementando a CNN para classificação de dígitos MNIST. O processo inclui: carregamento e normalização dos dados (60.000 imagens de treinamento), construção de uma rede com *3 camadas convolucionais* (32, 64 e 128 filtros) seguidas por camadas Dense (128 e 10 neurônios), treinamento em 5 épocas com otimizador Adam, e salvamento do modelo em formato Keras (model.h5). A acurácia esperada é de 95-99% no conjunto de teste.
-
-- Comando de execução: `python train_model.py`
-
----
-
-### Implementação: `optimize_model.py`:
-
-Após salvamento do modelo em formato Keras, o optimize_model.py fica responsável por otimizar o modelo treinado para EdgeAI. O script carrega o modelo treinado, cria um conversor a partir do modelo Keras (de `.h5` para `.tflite`) e utiliza *Dynamic Range Quantization* para reduzir o tamanho do modelo, diminuir seu uso de memória, acelerando sua execução em dispositivos mantendo uma boa acurácia. Após a conclusão da conversão, ele salva o modelo, com uma redução de 90-95% do modelo original para o otimizado.
-
-- Comando de execução: `python optimize_model.py`
