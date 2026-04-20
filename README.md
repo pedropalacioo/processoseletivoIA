@@ -302,18 +302,8 @@ Copie o link do seu repositório e envie conforme orientações do processo sele
 
 ## 📝 Relatório do Candidato
 
-O arquivo (`README.md`) deve ser utilizado como **relatório final do desafio**.
 
-Preencha todas as seções de forma clara e objetiva.
-
-> 💡 Dica: não é necessário um relatório extenso.  
-> O mais importante é demonstrar **clareza nas decisões técnicas**.
-
-
-
-**Exemplo:**
-
-👤 Identificação: **Nome Completo:**
+👤 Identificação: **Pedro Yan Alcantara Palacio**
 
 
 ### 1️⃣ Resumo da Arquitetura do Modelo
@@ -321,12 +311,31 @@ Preencha todas as seções de forma clara e objetiva.
 Descreva, em palavras, a arquitetura da **CNN** implementada no arquivo
 `train_model.py`.
 
+---
 
+Estrutura do modelo CNN implementado:
+3 Camadas Convolucionais progressivas seguidas de operações de pooling e camadas totalmente conectadas. 
+- A primeira camada convolucional extrai características básicas utilizando 32 filtros de tamanho 3x3 e ativação ReLU. Após isso, é feito uma operação de MaxPooling (2x2) que reduz as dimensões de 26x26 para 13x13 pixels.
+- A segunda camada convolucional aumenta a capacidade de representação com 64 filtros, extraíndo características mais complexas, seguido de outra operação de MaxPooling.
+- A terceira e última camada concolucional utiliza 128 filtros para captura de padrões refinados em dimensões reduzidas (3x3). 
+Após o Flatten, que converte os 1152 valores em um vetor unidimensional, duas camadas Dense completam a arquitetura:
+- A primeira utiliza 128 neurônios e ativação ReLU para aprendizado não-linear
+- A segunda com 10 neurônios e ativação Softmax para classificação multiclasse dos dígitos de 0-9.
+O modelo é compilado com o otimizador Adam e função de perda Sparse Categorical Crossentropy, treinado em 5 épocas com batch size de 128.
+O modelo possui alta acurácia mantendo um tamanho compacto adequando para Edge AI após otimização.
 
 ### 2️⃣ Bibliotecas Utilizadas
 
 Liste as principais bibliotecas utilizadas no projeto, preferencialmente
 com suas versões.
+
+---
+
+Principais Bibliotecas utilizadas: 
+- TensorFlow: Framework principal para a construção e otimização de modelos de deep learning
+- Keras(Integrada ao TensorFlow): API de alto nível para construção da arquitetura CNN
+- NumPy: Processamento númerico e manipulação de arrays multidimensionais (Utilizado implicitamente no TensorFlow)
+- os: Utilizado no `optimize_model.py` para obtenção do tamanho dos arquivos e exibir o relatório de otimização.
 
 
 
@@ -334,22 +343,28 @@ com suas versões.
 
 Explique qual técnica foi utilizada para otimizar o modelo no arquivo
 `optimize_model.py`.
+---
 
+A técnica de otimização utilizada foi a *Dynamic Range Quantization*, que reduz o tamanho e acelera a inferência ao converter os pesos de float32 para int8, sem precisar de um dataset durante a conversão. A técnica mantém a acurácia do modelo com redução de ~2-3% na acurácia, reduzindo seu tamanho em ~75-90%
 
 
 ### 4️⃣ Resultados Obtidos
 
 Informe o principal resultado obtido após o treinamento do modelo.
+---
 
+Os resultados obtivos consistem em:
+- `model.h5`: modelo treinado com acurácia esperada de 95-99%
+- `model.tflite`: modelo otimizado com redução de tamanho de 90-95%
 
 
 ### 5️⃣ Comentários Adicionais (Opcional)
 
 Utilize este espaço para comentar:
-- Dificuldades encontradas  
-- Decisões técnicas importantes  
-- Limitações do modelo  
-- Aprendizados durante o desafio
+- Dificuldades encontradas: Tive dificuldade em implementar o `optimize_model.py` por não entender muito bem como funcionava inicialmente esse processo, mas após pesquisar um pouco sobre quantizações, compreendi melhor os conceitos e decidi implementar a técnica *Dynamic Range Quantization* por se adequar mais ao propósito de EdgeAI
+- Decisões técnicas importantes: Divisão dos pixels values por 255.0, Adam para uma convergência mais rápida e a compatibilidade com CI/CD garantida pelo treinamento em 5 épocas
+- Limitações do modelo: O MNIST é um dataset simples e idealizado, que não inclui variações como sobre, ruído ou distorções, resultando num modelo performático que pode falhar com digitos manuscritos reais. Outra limitação é o volume de dados limitado, além de priorizar a Quantização ao invés da Acurácia
+- Aprendizados durante o desafio: Fixação de conhecimentos fundamentais para desenvolvimento de redes neurais, processo de otimização de modelos treinados e processamento de imagens
 
 
 ## 🆘 Suporte
@@ -368,11 +383,16 @@ Boa sorte no processo seletivo.
 ---
 ## Resumo dos passos e decisões técnicas para abordados para facilitar estruturação do README ao final do projeto:
 
-### Primeira Implementação: `train_model.py`:
+### Implementação: `train_model.py`:
 
-Implementando o treinamento de uma CNN para classificação de dígitos MNIST. O processo inclui: carregamento e normalização dos dados (60.000 imagens de treinamento), construção de uma rede com 3 camadas convolucionais (32, 64 e 128 filtros) seguidas por camadas Dense (128 e 10 neurônios), treinamento em 5 épocas com otimizador Adam, e salvamento do modelo em formato Keras (model.h5). A acurácia esperada é de 95-99% no conjunto de teste.
+Implementando a CNN para classificação de dígitos MNIST. O processo inclui: carregamento e normalização dos dados (60.000 imagens de treinamento), construção de uma rede com *3 camadas convolucionais* (32, 64 e 128 filtros) seguidas por camadas Dense (128 e 10 neurônios), treinamento em 5 épocas com otimizador Adam, e salvamento do modelo em formato Keras (model.h5). A acurácia esperada é de 95-99% no conjunto de teste.
 
 - Comando de execução: `python train_model.py`
 
 ---
 
+### Implementação: `optimize_model.py`:
+
+Após salvamento do modelo em formato Keras, o optimize_model.py fica responsável por otimizar o modelo treinado para EdgeAI. O script carrega o modelo treinado, cria um conversor a partir do modelo Keras (de `.h5` para `.tflite`) e utiliza *Dynamic Range Quantization* para reduzir o tamanho do modelo, diminuir seu uso de memória, acelerando sua execução em dispositivos mantendo uma boa acurácia. Após a conclusão da conversão, ele salva o modelo, com uma redução de 90-95% do modelo original para o otimizado.
+
+- Comando de execução: `python optimize_model.py`
