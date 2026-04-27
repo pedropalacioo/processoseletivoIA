@@ -19,9 +19,8 @@ model = keras.Sequential([
     layers.MaxPooling2D((2, 2)),  # 26×26 para 13×13
     layers.Conv2D(64, (3, 3), activation="relu"),
     layers.MaxPooling2D((2, 2)),  # 11×11 para 5×5
-    layers.Conv2D(128, (3, 3), activation="relu"),  # 3×3
-    layers.Flatten(),  # 1152 valores
-    layers.Dense(128, activation="relu"),
+    layers.Flatten(),  # ~1600 valores
+    layers.Dense(64, activation="relu"),
     layers.Dense(10, activation="softmax")  # Classificação
 ])
 
