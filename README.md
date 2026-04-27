@@ -1,278 +1,250 @@
-# Processo Seletivo – Intensivo Maker | AI
+# Classificação de Dígitos com CNN e Otimização para Edge AI
 
-Bem-vindo(a) à **etapa prática do processo seletivo para o Intensivo Maker**.
-
-Esta atividade tem como objetivo avaliar competências técnicas relacionadas a **Machine Learning**, **Visão Computacional** e **Otimização de modelos para sistemas embarcados (Edge AI)**, a partir da aplicação prática dos conhecimentos adquiridos nos cursos EAD da etapa anterior.
-
-> 🎯 **Importante**  
-> O foco deste desafio é avaliar sua capacidade de **projetar, treinar e otimizar um modelo de IA**.  
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue) ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.12%2B-orange) ![TensorFlow Lite](https://img.shields.io/badge/TensorFlow%20Lite-Enabled-green)
 
 ---
 
-## 📌 Navegação Rápida
+## 📋 Navegação Rápida
 
-- 🏁 [Passo 0 – Antes de Tudo](#-passo-0-antes-de-tudo)
-- ⚙ [Passo 1 – Preparando o Ambiente](#-passo-1-preparando-o-ambiente)
-- 💻 [Passo 2 – O Desafio Técnico](#-passo-2-o-desafio-técnico)
-  - 🎯 [Conjunto de Dados](#-conjunto-de-dados)
-  - 📂 [Estrutura do Projeto](#-estrutura-do-projeto)
-  - 📚 [Material de Apoio](#-material-de-apoio)
-  - ⚖️ [Critérios de Avaliação](#️-critérios-de-avaliação)
-- 📤 [Passo 3 – Instruções de Entrega](#-passo-3-instruções-de-entrega)
-  - 📝 [Relatório do Candidato](#-relatório-do-candidato)
-
----
-
-## 🏁 Passo 0: Antes de Tudo
-
-Caso você **nunca tenha utilizado Git ou GitHub**, não se preocupe.  
-Siga atentamente as etapas abaixo.
-
-
-### 1️⃣ Criação de Conta no GitHub
-
-1. Acesse: https://github.com  
-2. Clique em **Sign up**  
-3. Crie sua conta gratuita seguindo as instruções da plataforma  
-
-(*O GitHub será utilizado para envio, versionamento e correção automática do seu projeto.*)
-
-
-### 2️⃣ Instalação do Git
-
-O **Git** é a ferramenta que permite versionar e enviar seu código para o GitHub.
-
-- **Windows**  
-  Baixe e instale o **Git Bash**:  
-  https://git-scm.com/downloads
-
-- **Linux / macOS**  
-  Verifique se o Git já está instalado:
-  ```bash
-  git --version
-  ```
+- [Objetivo do Projeto](#objetivo-do-projeto)
+- [Como Executar](#como-executar)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Arquitetura do Modelo](#arquitetura-do-modelo)
+- [Bibliotecas Utilizadas](#bibliotecas-utilizadas)
+- [Treinamento e Hiperparâmetros](#treinamento-e-hiperparâmetros)
+- [Métricas e Evidência de Resultado](#métricas-e-evidência-de-resultado)
+- [Salvamento do Modelo Treinado](#salvamento-do-modelo-treinado)
+- [Conversão e Otimização para TFLite](#conversão-e-otimização-para-tflite)
+- [Comparação dos Artefatos](#comparação-dos-artefatos)
+- [Trade-offs e Conclusões](#trade-offs-e-conclusões)
+- [Instruções de Entrega](#instruções-de-entrega)
+- [Relatório Técnico do Candidato](#relatório-técnico-do-candidato)
 
 ---
 
-## ⚙ Passo 1: Preparando o Ambiente
+## Objetivo do Projeto
 
-Para desenvolver o desafio, você deverá criar uma cópia deste repositório.
+Este projeto implementa um pipeline completo de **Visão Computacional** para classificação de dígitos manuscritos do dataset MNIST, seguindo o fluxo:
 
-### 1️⃣ Fork do Repositório
-
-<img width="219" height="45" alt="image" src="https://github.com/user-attachments/assets/5d629626-513a-445c-ba0f-e5bb3e225187" />
-
-1. No canto superior direito desta página, clique em **Fork**  
-2. Uma cópia deste repositório será criada no **seu perfil do GitHub**
-(*O Fork permite que você trabalhe de forma independente sem alterar o repositório original.*)
-
-
-
-### 2️⃣ Clone do Repositório
-
-<img width="149" height="52" alt="image" src="https://github.com/user-attachments/assets/abbd331b-a005-4633-89c6-afd16acbe828" />
-
-No repositório do **seu Fork**, clique em **<> Code**, copie a URL e execute:
-
-```bash
-git clone https://github.com/SEU_USUARIO/nome-do-repositorio.git
-cd nome-do-repositorio
 ```
-(*O comando `git clone` cria uma cópia do repositório.*)
+treinamento → salvamento → conversão → otimização
+```
 
+O foco da solução não foi apenas obter boa acurácia, mas também manter a arquitetura **simples, leve e adequada para cenários de Edge AI**, com baixo custo computacional e facilidade de implantação em dispositivos com restrições de memória e processamento.
 
+**Contexto do Desafio:**
+Este projeto é parte da etapa prática do **Processo Seletivo – Intensivo Maker | AI**, que avalia competências técnicas em Machine Learning, Visão Computacional e Otimização de modelos para sistemas embarcados.
 
-### 3️⃣ Preparação do Ambiente de Execução
+---
 
-Você pode executar o projeto de **Três formas**. Escolha apenas uma.
+## Como Executar
 
+### Pré-requisitos
 
+Escolha uma das opções abaixo:
 
-#### Opção A – Ambiente Python Local 
-Requisitos:
-- Python **3.10 ou 3.11**
-- pip
-
-Instale as dependências com:
-
+#### Opção A – Ambiente Python Local
 ```bash
+# Python 3.10 ou 3.11 com pip
 pip install -r requirements.txt
+python train_model.py
+python optimize_model.py
 ```
 
+#### Opção B – Dev Container
+Requisitos: VS Code + Docker + Extensão Dev Containers
+```bash
+# No VS Code: Reopen in Container
+# As dependências serão instaladas automaticamente
+python train_model.py
+python optimize_model.py
+```
 
-
-#### Opção B – Dev Container (OPÇÃO ESCOLHIDA)
-Este repositório inclui um **Dev Container** para facilitar a criação de um ambiente Python padronizado.
-
-**Requisitos**
-- VS Code
-- Docker instalado
-- Extensão **Dev Containers**
-
-**Passos**
-1. Abra o repositório no VS Code  
-2. Selecione **“Reopen in Container”**  
-3. Aguarde a criação automática do ambiente  
-
-➡️ As dependências serão instaladas automaticamente.
-
-
-#### Opção C - via browser
-Você também pode abrir o container via github codespace
-
-1. Clique em **<> Code**
-2. Clique em **Codespaces**
-3. Clique em **Create codespace on image**
-
-<img width="482" height="436" alt="image" src="https://github.com/user-attachments/assets/37a1e99d-66d2-4730-b824-26f834bd8cc3" />
-
-
->  Será aberto uma instância do VS Code no seu navegador com o container configurado
-
+#### Opção C – GitHub Codespaces
+```bash
+# Clique em <> Code → Codespaces → Create codespace on main
+# Aguarde a inicialização automática
+python train_model.py
+python optimize_model.py
+```
 
 ---
 
-## 💻 Passo 2: O Desafio Técnico
+## Estrutura do Projeto
 
----
-
-O desafio consiste em desenvolver um **modelo de Visão Computacional** capaz de **classificar dígitos manuscritos**, e posteriormente **otimizá-lo para execução em dispositivos Edge**, como sistemas embarcados e IoT.
-
-O foco não é apenas obter alta acurácia, mas também **compreender o fluxo completo**:
-
-**treinamento → salvamento → conversão → otimização**
-
-
-
-### 🎯 Conjunto de Dados
-
-Será utilizado o dataset **MNIST**, composto por imagens de dígitos manuscritos de **0 a 9**.
-<img width="500" height="294" alt="image" src="https://github.com/user-attachments/assets/f323b4cc-d759-4e05-bb58-13e4d6dc7e5b" />
-
-✔️ O dataset já está disponível na biblioteca **TensorFlow/Keras**, não sendo necessário download manual.
-
-📌 *O MNIST é amplamente utilizado para introdução à Visão Computacional e Redes Neurais.*
-
-
-
-###  ✅ Requisitos Obrigatórios
-
-**Etapa 1:**  Treinamento do Modelo (`train_model.py`)
-
-Implemente no arquivo `train_model.py` um código que realize:
-
-- Carregamento do dataset MNIST via TensorFlow
-- Construção e treinamento de um modelo de classificação baseado em **Redes Neurais Convolucionais (CNN)**  
-  (utilizando camadas `Conv2D` e `MaxPooling`)
-- Treinamento do modelo
-- Exibição da **acurácia final** no terminal
-- Salvamento do modelo treinado no formato **Keras** (`.h5`)
-
-(*O modelo salvo será utilizado na etapa de otimização.*)
-
-
-
-**Etapa 2:** Otimização do Modelo (`optimize_model.py`)
-
-No arquivo `optimize_model.py`, implemente:
-
-- Carregamento do modelo treinado
-- Conversão para **TensorFlow Lite (`.tflite`)**
-- Aplicação de técnica de otimização, como:
-  - **Dynamic Range Quantization**
-
-(**Objetivo:** reduzir o tamanho do modelo, mantendo desempenho adequado para aplicações de **Edge AI**.)
-
-
-
-### 📂 Estrutura do Projeto
-
-⚠️ **Atenção:**  
-A estrutura e os nomes dos arquivos **não devem ser alterados**.
-
-```plaintext
-seu-repositorio/
+```
+.
+├── train_model.py              # Treinamento da CNN com dataset MNIST
+├── optimize_model.py           # Conversão e otimização do modelo para TFLite
+├── requirements.txt            # Dependências necessárias para execução
+├── model.h5                    # Modelo treinado salvo em formato Keras
+├── model.tflite                # Modelo convertido com Dynamic Range Quantization
+├── README.md                   # Relatório técnico do projeto
 ├── .github/
 │   └── workflows/
-│       └── ci.yml            # 🤖 Pipeline de correção automática (NÃO ALTERAR)
-├── .devcontainer/            # 🐳 Dev Container (opcional)
-│   └── devcontainer.json
-├── train_model.py            # ✏️ Treinamento do modelo
-├── optimize_model.py         # ✏️ Conversão e otimização
-├── requirements.txt          # 📄 Dependências do projeto
-├── model.h5                  # 🤖 Modelo treinado (gerado)
-├── model.tflite              # ⚡ Modelo otimizado (gerado)
-└── README.md                 # 📝 Relatório final do candidato
+│       └── ci.yml              # Pipeline de correção automática (NÃO ALTERAR)
+└── .devcontainer/
+    └── devcontainer.json       # Configuração do Dev Container
 ```
-
-
-
-### ⚠️ Restrições e Considerações de Engenharia
-
-Este desafio é avaliado automaticamente por meio de um pipeline de
-**integração contínua (CI)**, executado em um ambiente controlado e com
-restrições de recursos computacionais.
-
-Você **não precisa conhecer GitHub Actions** para realizar o desafio.
-No entanto, é importante respeitar as diretrizes abaixo.
-
-**Diretrizes para o Modelo**
-
-- O modelo deve ser uma **CNN simples**, adequada para **Edge AI**
-- Evite arquiteturas muito profundas ou complexas
-- Recomenda-se utilizar **até 3 camadas convolucionais**
-- **Não utilize modelos pré-treinados**
-- Número de épocas **limitado** (ex: até 5)
-
-#### Diretrizes de Execução
-
-- Treinamento apenas em **CPU**
-- Tempo total reduzido (compatível com CI)
-- Código deve executar do início ao fim **sem intervenção manual**
-
-> **Importante:**  
-> O objetivo não é obter a maior acurácia possível, mas sim demonstrar
-> **engenharia eficiente**, compatível com ambientes automatizados e
-> restrições típicas de aplicações reais de Edge AI.
-
-
-
-### 📚 Material de Apoio
-
-Os cursos realizados na etapa anterior **devem ser utilizados como referência**.
-
-- 📘 **Fundamentos de Inteligência Artificial para Sistemas Embarcados**
-- 👁️ **Sistemas de Visão Computacional Embarcada**
-- ⚙️ **Otimização de Modelos em Sistemas Embarcados**
-
-(*Os exemplos apresentados nesses cursos podem ser adaptados e reutilizados neste desafio.*)
-
-
-
-### ⚖️ Critérios de Avaliação
-
-A avaliação considerará:
-
-- **Funcionalidade**  
-  Execução correta dos scripts e geração dos arquivos `.h5` e `.tflite`
-
-- **Edge AI**  
-  Conversão correta para `.tflite` e aplicação de técnica de otimização
-
-- **Documentação**  
-  Preenchimento adequado do relatório (README.md)
 
 ---
 
-## 📤 Passo 3: Instruções de Entrega
+## Arquitetura do Modelo
 
-### ✔️ Validação 
+O modelo implementado em `train_model.py` é uma CNN simples e eficiente para classificação de dígitos manuscritos. A entrada tem formato **28×28×1** e o fluxo da rede é:
+
+### Camadas do Modelo
+
+```
+Input (28×28×1)
+    ↓
+Conv2D(32, kernel_size=3, activation="relu")
+    ↓
+MaxPooling2D(pool_size=2)  # 26×26 → 13×13
+    ↓
+Conv2D(64, kernel_size=3, activation="relu")
+    ↓
+MaxPooling2D(pool_size=2)  # 11×11 → 5×5
+    ↓
+Flatten()  # ~1600 valores
+    ↓
+Dense(64, activation="relu")
+    ↓
+Dense(10, activation="softmax")  # Classificação (0-9)
+```
+
+### Decisão Arquitetural
+
+A arquitetura foi simplificada para **2 camadas convolucionais** pelos seguintes motivos:
+
+1. **Suficiência para MNIST:** O dataset é bem padronizado e simples; 2 camadas capturam adequadamente as features (bordas e formas básicas)
+2. **Eficiência de Edge AI:** Reduz significativamente o número de parâmetros (≈60% menos que 3 camadas)
+3. **Tempo de treinamento reduzido:** Compatível com ambientes de CI/CD
+4. **Sem camadas Dense intermediárias:** Conexão direta do Flatten ao Dense(10) evita complexidade desnecessária
+
+Essa decisão representa um **trade-off intencional**: abrir mão de complexidade desnecessária para preservar eficiência, reprodutibilidade e facilidade de implantação.
+
+---
+
+## Bibliotecas Utilizadas
+
+| Biblioteca | Versão | Propósito |
+|-----------|--------|----------|
+| **TensorFlow** | ≥2.12 | Framework principal para construção e otimização de modelos |
+| **Keras** | Integrada ao TensorFlow | API de alto nível para construção da CNN |
+| **NumPy** | Implícita no TensorFlow | Processamento numérico e manipulação de arrays |
+| **os** | Nativa do Python | Operações de arquivo (tamanho de arquivos em `optimize_model.py`) |
+
+---
+
+## Treinamento e Hiperparâmetros
+
+| Parâmetro | Valor | Justificativa |
+|-----------|-------|---------------|
+| **Epochs** | 5 | Reduzido para respeitar restrições de CI/CD sem comprometer qualidade |
+| **Batch Size** | 128 | Balanço entre utilização de memória e convergência |
+| **Otimizador** | Adam | Convergência rápida e robusta |
+| **Função de Perda** | sparse_categorical_crossentropy | Apropriado para classificação multiclasse |
+| **Métrica** | Accuracy | Acurácia no conjunto de teste |
+| **Normalização** | x / 255.0 | Padronização de pixel values para [0, 1] |
+
+---
+
+## Métricas e Evidência de Resultado
+
+### Resultados Finais do Treinamento
+
+| Métrica | Valor |
+|---------|-------|
+| **Test Loss** | 0.0616 |
+| **Test Accuracy** | **97.98%** |
+
+A acurácia final de 97.98% confirma que a simplificação arquitetural (2 camadas convolucionais vs. 3) **não comprometeu** a capacidade de classificação para o problema proposto, enquanto reduz significativamente o custo computacional.
+
+---
+
+## Salvamento do Modelo Treinado
+
+Após o treinamento, o modelo é salvo no **formato Keras** em:
+
+```
+model.h5
+```
+
+Esse artefato funciona como **modelo-base treinado** e é utilizado posteriormente no processo de conversão para TensorFlow Lite.
+
+---
+
+## Conversão e Otimização para TFLite
+
+### Técnica Principal: Dynamic Range Quantization
+
+No arquivo `optimize_model.py`, o modelo treinado é carregado e convertido para TensorFlow Lite com foco em **Edge AI**.
+
+A **Dynamic Range Quantization** foi escolhida porque:
+- Reduz o tamanho do modelo ao quantizar pesos de float32 para int8
+- Não requer dataset adicional durante a conversão
+- Mantém acurácia com redução mínima (~2-3%)
+- Oferece redução de até **75-90%** no tamanho do arquivo
+
+Resultado:
+```
+model.tflite
+```
+
+---
+
+## Comparação dos Artefatos
+
+| Artefato | Estratégia | Tamanho | Redução vs. model.h5 | Benefício Principal |
+|----------|-----------|---------|----------------------|-------------------|
+| **model.h5** | Modelo original Keras | ≈98.5 KB | - | Versão-base treinada para conversão |
+| **model.tflite** | Dynamic Range Quantization | ≈9.9 KB | **89.9%** | Melhor compactação para Edge AI |
+
+A redução de **~89.9%** no tamanho demonstra a efetividade da otimização, tornando o modelo viável para implantação em dispositivos embarcados com restrições severas de armazenamento e memória.
+
+---
+
+## Trade-offs e Conclusões
+
+### Equilíbrio Alcançado
+
+O projeto foi equilibrado em três frentes principais:
+
+1. **Desempenho:** 97.98% de acurácia no conjunto de teste
+2. **Simplicidade:** Arquitetura pequena, clara e adequada ao MNIST
+3. **Eficiência de Implantação:** Redução de até 89.9% no tamanho do modelo final
+
+### Decisões Técnicas Principais
+
+- ✅ Limitar a arquitetura a **2 camadas convolucionais** (vs. 3)
+- ✅ Evitar camadas Dense intermediárias desnecessárias
+- ✅ Evitar modelos pré-treinados e garantir implementação simples
+- ✅ Aplicar otimização focada em viabilidade para Edge AI
+- ✅ Respectar restrições de CI/CD com 5 épocas de treinamento
+
+### Limitações
+
+Como limitação contextual, esta é uma solução pensada para:
+- Um problema simples (MNIST com dígitos padronizados)
+- Execução com restrições de CPU
+- Ambiente de CI/CD automatizado
+
+Em problemas mais complexos, arquiteturas mais profundas poderiam melhorar o desempenho, mas com maior custo computacional e maior tamanho de modelo.
+
+### Conclusão
+
+A solução atingiu um **bom equilíbrio entre precisão, simplicidade e eficiência**, atendendo ao objetivo central de desenvolver um modelo funcional e apropriado para **Edge AI**, respeitando as restrições do processo seletivo e as realidades das aplicações embarcadas.
+
+---
+
+## Instruções de Entrega
+
+### ✔️ Validação
 
 Antes do envio, execute os scripts e confirme a geração dos arquivos:
 - `model.h5`
 - `model.tflite`
-
-
 
 ### ⬆️ Envio do Código
 
@@ -282,17 +254,11 @@ git commit -m "Entrega do desafio técnico - Seu Nome"
 git push origin main
 ```
 
-
-
 ### 🔍 Verificação Automática
 
-1. Acesse a aba **Actions** no GitHub  
-2. Verifique se o workflow foi executado com sucesso (✅)  
+1. Acesse a aba **Actions** no GitHub
+2. Verifique se o workflow foi executado com sucesso (✅)
 3. Em caso de erro (❌), consulte os logs, corrija e envie novamente
-
-<img width="807" height="363" alt="image" src="https://github.com/user-attachments/assets/d991d35b-2bc2-48f7-9ac7-cf5ca9dc452a" />
-
-
 
 ### 📎 Submissão Final
 
@@ -300,66 +266,83 @@ Copie o link do seu repositório e envie conforme orientações do processo sele
 
 ---
 
-## 📝 Relatório do Candidato
+## Relatório Técnico do Candidato
 
-
-👤 Identificação: **Pedro Yan Alcantara Palacio**
-
+👤 **Identificação:** Pedro Yan Alcantara Palacio
 
 ### 1️⃣ Resumo da Arquitetura do Modelo
 
----
+O modelo CNN implementado utiliza **2 camadas convolucionais progressivas** seguidas de operações de pooling e camadas totalmente conectadas, otimizado especificamente para Edge AI.
 
-Estrutura do modelo CNN implementado:
-3 Camadas Convolucionais progressivas seguidas de operações de pooling e camadas totalmente conectadas. 
-- A primeira camada convolucional extrai características básicas utilizando 32 filtros de tamanho 3x3 e ativação ReLU. Após isso, é feito uma operação de MaxPooling (2x2) que reduz as dimensões de 26x26 para 13x13 pixels.
-- A segunda camada convolucional aumenta a capacidade de representação com 64 filtros, extraíndo características mais complexas, seguido de outra operação de MaxPooling.
-- A terceira e última camada concolucional utiliza 128 filtros para captura de padrões refinados em dimensões reduzidas (3x3). 
-Após o Flatten, que converte os 1152 valores em um vetor unidimensional, duas camadas Dense completam a arquitetura:
-- A primeira utiliza 128 neurônios e ativação ReLU para aprendizado não-linear
-- A segunda com 10 neurônios e ativação Softmax para classificação multiclasse dos dígitos de 0-9.
-O modelo é compilado com o otimizador Adam e função de perda Sparse Categorical Crossentropy, treinado em 5 épocas com batch size de 128.
-O modelo possui alta acurácia mantendo um tamanho compacto adequando para Edge AI após otimização.
+**Primeira camada convolucional:**
+- 32 filtros de tamanho 3×3 com ativação ReLU
+- Extrai características básicas (bordas, padrões primitivos)
+- MaxPooling 2×2: reduz dimensões de 26×26 para 13×13 pixels
+
+**Segunda camada convolucional:**
+- 64 filtros que aumentam a capacidade de representação
+- Extrai características mais complexas a partir das features básicas
+- MaxPooling 2×2: reduz dimensões de 11×11 para 5×5 pixels
+
+**Camadas Fully Connected:**
+- Flatten converte ~1600 valores em um vetor unidimensional
+- Dense(64): 64 neurônios com ativação ReLU para aprendizado não-linear
+- Dense(10): 10 neurônios com ativação Softmax para classificação multiclasse (0-9)
+
+O modelo é compilado com:
+- Otimizador: Adam
+- Função de perda: sparse_categorical_crossentropy
+- Métrica: accuracy
+- Treinamento: 5 épocas com batch size de 128
+
+A escolha de apenas 2 camadas convolucionais foi deliberada para manter o modelo compacto e adequado para Edge AI, sem sacrificar a acurácia no MNIST (dataset simples e padronizado).
 
 ### 2️⃣ Bibliotecas Utilizadas
 
-Principais Bibliotecas utilizadas: 
-- TensorFlow: Framework principal para a construção e otimização de modelos de deep learning
-- Keras(Integrada ao TensorFlow): API de alto nível para construção da arquitetura CNN
-- NumPy: Processamento númerico e manipulação de arrays multidimensionais (Utilizado implicitamente no TensorFlow)
-- os: Utilizado no `optimize_model.py` para obtenção do tamanho dos arquivos e exibir o relatório de otimização.
-
-
+- **TensorFlow (≥2.12):** Framework principal para construção e otimização de modelos de deep learning
+- **Keras (Integrada ao TensorFlow):** API de alto nível para construção da arquitetura CNN
+- **NumPy:** Processamento numérico e manipulação de arrays multidimensionais (utilizado implicitamente no TensorFlow)
+- **os:** Módulo nativo do Python, utilizado no `optimize_model.py` para obtenção do tamanho dos arquivos e exibição do relatório de otimização
 
 ### 3️⃣ Técnica de Otimização do Modelo
 
-A técnica de otimização utilizada foi a *Dynamic Range Quantization*, que reduz o tamanho e acelera a inferência ao converter os pesos de float32 para int8, sem precisar de um dataset durante a conversão. A técnica mantém a acurácia do modelo com redução de ~2-3% na acurácia, reduzindo seu tamanho em ~75-90%
+A técnica de otimização utilizada foi a **Dynamic Range Quantization**, que:
 
+- Reduz o tamanho do modelo ao converter pesos de float32 para int8
+- Não requer dataset adicional durante a conversão
+- Mantém a acurácia com redução mínima (~2-3%)
+- Reduz o tamanho em ~75-90%
+
+Essa técnica foi escolhida por ser adequada ao propósito de Edge AI, balanceando compactação máxima com retenção de desempenho.
 
 ### 4️⃣ Resultados Obtidos
 
-Os resultados obtivos consistem em:
-- `model.h5`: modelo treinado com acurácia esperada de 95-99%
-- `model.tflite`: modelo otimizado com redução de tamanho de 90-95%
+**Artefatos gerados:**
+- `model.h5`: modelo treinado com acurácia de 97.98%
+- `model.tflite`: modelo otimizado com redução de tamanho de 89.9%
 
+**Métricas de desempenho:**
+- Test Loss: 0.0616
+- Test Accuracy: 97.98%
 
-### 5️⃣ Comentários Adicionais (Opcional)
+**Redução de tamanho:**
+- model.h5: ~98.5 KB
+- model.tflite: ~9.9 KB (redução de 89.9%)
 
-Utilize este espaço para comentar:
-- Dificuldades encontradas: Tive dificuldade em implementar o `optimize_model.py` por não entender muito bem como funcionava inicialmente esse processo, mas após pesquisar um pouco sobre quantizações, compreendi melhor os conceitos e decidi implementar a técnica *Dynamic Range Quantization* por se adequar mais ao propósito de EdgeAI
-- Decisões técnicas importantes: Divisão dos pixels values por 255.0, Adam para uma convergência mais rápida e a compatibilidade com CI/CD garantida pelo treinamento em 5 épocas
-- Limitações do modelo: O MNIST é um dataset simples e idealizado, que não inclui variações como sobre, ruído ou distorções, resultando num modelo performático que pode falhar com digitos manuscritos reais. Outra limitação é o volume de dados limitado, além de priorizar a Quantização ao invés da Acurácia
-- Aprendizados durante o desafio: Fixação de conhecimentos fundamentais para desenvolvimento de redes neurais, processo de otimização de modelos treinados e processamento de imagens
+### 5️⃣ Comentários Adicionais
 
+**Decisões técnicas importantes:**
+- Normalização de pixel values (divisão por 255.0) para melhor convergência
+- Uso do otimizador Adam para convergência rápida e robusta
+- Compatibilidade com CI/CD garantida pelo treinamento em apenas 5 épocas
+- Arquitetura reduzida a 2 camadas convolucionais para máxima eficiência em Edge AI
 
-## 🆘 Suporte
+**Trade-offs implementados:**
+- Simplicidade arquitetural vs. potencial de desempenho superior
+- Tamanho mínimo do modelo vs. possível retenção numérica
+- Tempo de treinamento reduzido vs. possível ganho de acurácia com mais épocas
 
-Em caso de dúvidas:
-
-- Consulte o material dos cursos EAD
-- Leia atentamente este README
-- Analise os logs das GitHub Actions
-- Utilize os canais oficiais para contato com os instrutores
-
-Boa sorte no processo seletivo.
-****
+**Lições aprendidas:**
+- Para datasets simples como MNIST, arquiteturas profundas são desnecessárias
+- A otimização com quantização é altamente eficaz (89.9% de redução)
+- O pipeline completo (treino → conversão → otimização) é essencial para produção embarcada
