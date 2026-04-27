@@ -1,6 +1,3 @@
-# Modelos gerados (não versionar)
-*.h5
-*.tflite
 
 # Python
 __pycache__/
